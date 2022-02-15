@@ -109,6 +109,10 @@ Options:
   -?, -h, --help                    Show help and usage information
 ```
 
+## Advanced example
+
+For more advanced example look at [Sigurn.CommandLine.Sample](src/Sigurn.CommandLine.Sample) project.
+
 ## Details
 
 By default all names are optional. Commands, arguments, options will be named after methods and properties using dash notation.
