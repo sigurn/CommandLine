@@ -34,13 +34,16 @@ class ValueParser : ITokenParser
             if (value is bool bl)
                 return bl ? "true" : "false";
 
-            if (value is IEnumerable e)
+            if (IsArray)
             {
-                var items = new List<string>();
-                foreach(var obj in e)
-                    items.Add(obj?.ToString() ?? "null");
+                if (value is IEnumerable e)
+                {
+                    var items = new List<string>();
+                    foreach (var obj in e)
+                        items.Add(obj?.ToString() ?? "null");
 
-                return string.Join(' ', items.ToArray());
+                    return string.Join(' ', items.ToArray());
+                }
             }
 
             if (value is Enum en)
