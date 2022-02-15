@@ -1,0 +1,34 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore src/Sigurn.CommandLine.sln
+    - name: Test
+      run: dotnet test -c Release --no-build --verbosity normal src/Sigurn.CommandLine.sln
+    - name: Pack
+      run: dotnet pack -c Release --no-build src/Sigurn.CommandLine.sln
+    -name: Publish artifacts
+      uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            src/Sigurn.CommandLine/bin/Release/*.nupkg
+            src/Sigurn.CommandLine/bin/Release/*.snupkg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
