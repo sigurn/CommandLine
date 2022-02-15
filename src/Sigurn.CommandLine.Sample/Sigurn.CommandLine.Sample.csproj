@@ -8,6 +8,10 @@
     <AssemblyName>sample</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Sigurn.CommandLine\Sigurn.CommandLine.csproj" />
   </ItemGroup>
