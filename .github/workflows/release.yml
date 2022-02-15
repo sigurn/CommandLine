@@ -23,12 +23,12 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal src/Sigurn.CommandLine.sln
     - name: Pack
       run: dotnet pack -c Release --no-build src/Sigurn.CommandLine.sln
-    -name: Publish artifacts
+    - name: Publish artifacts
       uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            src/Sigurn.CommandLine/bin/Release/*.nupkg
-            src/Sigurn.CommandLine/bin/Release/*.snupkg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        files: |
+          src/Sigurn.CommandLine/bin/Release/*.nupkg
+          src/Sigurn.CommandLine/bin/Release/*.snupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
