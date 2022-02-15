@@ -19,7 +19,11 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore src\Sigurn.CommandLine.sln
-    - name: Build
+    - name: Build Debug
       run: dotnet build --no-restore src\Sigurn.CommandLine.sln
-    - name: Test
+    - name: Build Release
+      run: dotnet build --no-restore -c Release src\Sigurn.CommandLine.sln
+    - name: Test Debug
       run: dotnet test --no-build --verbosity normal  src\Sigurn.CommandLine.sln
+    - name: Test Release
+      run: dotnet test --no-build --verbosity normal -c Release src\Sigurn.CommandLine.sln
