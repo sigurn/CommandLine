@@ -12,7 +12,7 @@ public class Parser
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New<T>(Func<T, int> action, string helpText ="") where T : class, new()
+    public static Parser New<T>(Func<T, int> action, params string[] helpText) where T : class, new()
     {
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
@@ -25,7 +25,7 @@ public class Parser
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New<T>(Action<T> action, string helpText = "") where T : class, new()
+    public static Parser New<T>(Action<T> action, params string[] helpText) where T : class, new()
     {
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
@@ -38,7 +38,7 @@ public class Parser
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New<T>(Func<T, CancellationToken, Task<int>> action, string helpText = "") where T : class, new()
+    public static Parser New<T>(Func<T, CancellationToken, Task<int>> action, params string[] helpText) where T : class, new()
     {
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
@@ -51,7 +51,7 @@ public class Parser
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New<T>(Func<T, CancellationToken, Task> action, string helpText = "") where T : class, new()
+    public static Parser New<T>(Func<T, CancellationToken, Task> action, params string[] helpText) where T : class, new()
     {
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
@@ -72,11 +72,24 @@ public class Parser
     /// <summary>
     /// Creates a new instance of the command line parser.
     /// </summary>
+    /// <remarks>This method creates a new instance of the command line parser with empty root command.
+    /// That means that nothing will be executed if no command is provided.</remarks>
+    /// <param name="helpText">Help text</param>
+    /// <returns>A new intsance of the command line parser.</returns>
+    public static Parser New(params string[] helpText)
+    {
+        var parser = new Parser(new Command((_) => Task.CompletedTask, helpText));
+        return parser;
+    }
+
+    /// <summary>
+    /// Creates a new instance of the command line parser.
+    /// </summary>
     /// <remarks>The created instance will be with command which does not need options and arguments.</remarks>
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New(Action action, string helpText = "")
+    public static Parser New(Action action, params string[] helpText)
     {
         var parser = new Parser(new Command(action, helpText));
         return parser;
@@ -89,7 +102,7 @@ public class Parser
     /// <param name="action">Root action which is executed when no commands are provided.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>A new intsance of the command line parser.</returns>
-    public static Parser New(Func<int> action, string helpText = "")
+    public static Parser New(Func<int> action, string[] helpText)
     {
         var parser = new Parser(new Command(action, helpText));
         return parser;
@@ -102,6 +115,7 @@ public class Parser
     {
         _command = command;
     }
+
 
     /// <summary>
     /// Defines action which will be used for 'version' command.
