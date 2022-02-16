@@ -291,7 +291,7 @@ var parser = Parser.New(new Command<TestOptions>(options =>
 
 #### Async root command with options and help text
 ```C#
-var parser = Parser.New<TestOptions>(options => 
+var parser = Parser.New<TestOptions>((options, cancellationToken) => 
 {
   Console.WriteLine("Hello, world!");
   return Task.CompletedTask;
@@ -299,7 +299,7 @@ var parser = Parser.New<TestOptions>(options =>
 ```
 
 ```C#
-var parser = Parser.New(new Command<TestOptions>(options => 
+var parser = Parser.New(new Command<TestOptions>((options, cancellationToken) => 
 {
   Console.WriteLine("Hello, world!");
   return Task.CompletedTask;
@@ -308,7 +308,7 @@ var parser = Parser.New(new Command<TestOptions>(options =>
 
 #### Async root command with options and help text and returning result
 ```C#
-var parser = Parser.New<TestOptions>(options => 
+var parser = Parser.New<TestOptions>((options, cancellationToken) => 
 {
   Console.WriteLine("Hello, world!");
   return Task.FromResult(0);
@@ -316,7 +316,7 @@ var parser = Parser.New<TestOptions>(options =>
 ```
 
 ```C#
-var parser = Parser.New(new Command<TestOptions>(options => 
+var parser = Parser.New(new Command<TestOptions>((options, cancellationToken) => 
 {
   Console.WriteLine("Hello, world!");
   return Task.FromResult(0);

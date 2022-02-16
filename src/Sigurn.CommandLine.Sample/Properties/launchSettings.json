@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sigurn.CommandLine.Sample": {
+      "commandName": "Project",
+      "commandLineArgs": "hello --help"
+    }
+  }
+}
