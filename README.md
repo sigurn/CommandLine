@@ -1,5 +1,5 @@
 # CommandLine
-![main workflow](https://github.com/sigurn/CommandLine/actions/workflows/build.yml/badge.svg)
+![main workflow](https://github.com/sigurn/CommandLine/actions/workflows/build.yml/badge.svg) ![nuget](https://img.shields.io/nuget/v/Sigurn.CommandLine)
 
 
 ## Why
