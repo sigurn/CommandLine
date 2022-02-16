@@ -14,6 +14,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New<T>(Func<T, int> action, params string[] helpText) where T : class, new()
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
     }
@@ -27,6 +30,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New<T>(Action<T> action, params string[] helpText) where T : class, new()
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
     }
@@ -40,6 +46,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New<T>(Func<T, CancellationToken, Task<int>> action, params string[] helpText) where T : class, new()
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
     }
@@ -53,6 +62,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New<T>(Func<T, CancellationToken, Task> action, params string[] helpText) where T : class, new()
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command<T>(action, helpText));
         return parser;
     }
@@ -91,6 +103,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New(Action action, params string[] helpText)
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command(action, helpText));
         return parser;
     }
@@ -104,6 +119,9 @@ public class Parser
     /// <returns>A new intsance of the command line parser.</returns>
     public static Parser New(Func<int> action, string[] helpText)
     {
+        if (helpText == null || helpText.Length == 0)
+            helpText = Helpers.GetHelpTextFromDelegate(action);
+
         var parser = new Parser(new Command(action, helpText));
         return parser;
     }
@@ -161,7 +179,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand(string name, Action action, string helpText = "")
+    public Parser WithCommand(string name, Action action, params string[] helpText)
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -176,7 +194,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand(string name, Func<int> action, string helpText = "")
+    public Parser WithCommand(string name, Func<int> action, params string[] helpText)
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -190,7 +208,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for the command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand<T>(string name, Action<T> action, string helpText = "") where T : class, new()
+    public Parser WithCommand<T>(string name, Action<T> action, params string[] helpText) where T : class, new()
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -204,7 +222,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for the command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand<T>(string name, Func<T, int> action, string helpText = "") where T : class, new()
+    public Parser WithCommand<T>(string name, Func<T, int> action, params string[] helpText) where T : class, new()
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -219,7 +237,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand(string name, Func<CancellationToken, Task> action, string helpText = "")
+    public Parser WithCommand(string name, Func<CancellationToken, Task> action, params string[] helpText)
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -233,7 +251,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for the command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand<T>(string name, Func<T, CancellationToken, Task> action, string helpText = "") where T : class, new()
+    public Parser WithCommand<T>(string name, Func<T, CancellationToken, Task> action, params string[] helpText) where T : class, new()
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -248,7 +266,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for root command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand(string name, Func<CancellationToken, Task<int>> action, string helpText = "")
+    public Parser WithCommand(string name, Func<CancellationToken, Task<int>> action, params string[] helpText)
     {
         _command.AddCommand(name, action, helpText);
         return this;
@@ -262,7 +280,7 @@ public class Parser
     /// <param name="action">Action to be executed when the command is activated.</param>
     /// <param name="helpText">Help text to be shown for the command in help.</param>
     /// <returns>The current instance of the parser to be able to chain commands.</returns>
-    public Parser WithCommand<T>(string name, Func<T, CancellationToken, Task<int>> action, string helpText = "") where T : class, new()
+    public Parser WithCommand<T>(string name, Func<T, CancellationToken, Task<int>> action, params string[] helpText) where T : class, new()
     {
         _command.AddCommand(name, action, helpText);
         return this;
