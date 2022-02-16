@@ -75,7 +75,7 @@ class Options<T> : IOptions where T : class, new()
             if (isArray)
                 throw new CommandLineException("Only last argument may be an array.");
 
-            if (isRequired && arg.IsRequired)
+            if (isRequired && !arg.IsRequired)
                 throw new CommandLineException("If one argument is requied all the futher arguments must be required too.");
 
             isRequired = arg.IsRequired ? true : isRequired;
