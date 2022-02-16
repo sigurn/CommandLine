@@ -589,10 +589,7 @@ public class Command : ITokenParser
                         sb.Append("...");
                     sb.Append('>');
 
-                    if (!x.IsRequired)
-                        sb.Append(' ').Append('{').Append(x.Value).Append('}');
-
-                    return (Name: sb.ToString(), Help: x.HelpText);
+                    return (Name: sb.ToString(), Help: x.HelpText, Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
                 });
 
             ShowTable(cmdList.ToList());
@@ -617,21 +614,13 @@ public class Command : ITokenParser
                 else
                     sb.Append($"<{x.HelpValue}>");
 
-                if (!x.IsRequired)
-                {
-                    sb.Append(' ');
-                    sb.Append('{');
-                    sb.Append(x.Value);
-                    sb.Append('}');
-                }
-
-                return (Name: sb.ToString(), Help: x.HelpText);
+                return (Name: sb.ToString(), Help: x.HelpText, Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
             });
 
         if (IsRootCommand)
-            optList = optList.Append((Name: "  --version", Help: new string[] { "Show version information" }));
+            optList = optList.Append((Name: "  --version", Help: new string[] { "Show version information" }, Default: null));
 
-        optList = optList.Append((Name: "  -?, -h, --help", Help: new string[] { "Show help and usage information" }));
+        optList = optList.Append((Name: "  -?, -h, --help", Help: new string[] { "Show help and usage information" }, Default: null));
 
         ShowTable(optList.ToList());
 
@@ -642,10 +631,10 @@ public class Command : ITokenParser
             Console.WriteLine("Commands:");
 
             var cmdList = _commands
-                .Select(x => (Name: $"  {x.Key}", Help: x.Value.HelpText));
+                .Select(x => (Name: $"  {x.Key}", Help: x.Value.HelpText, Default: (string?)null));
             if (IsRootCommand)
-                cmdList = cmdList.Append((Name: "  version", Help: new string[] { "Show version information" }));
-            cmdList = cmdList.Append((Name: "  help", Help: new string[] { "Show help and usage information" }));
+                cmdList = cmdList.Append((Name: "  version", Help: new string[] { "Show version information" }, Default: null));
+            cmdList = cmdList.Append((Name: "  help", Help: new string[] { "Show help and usage information" }, Default: null));
 
             ShowTable(cmdList.ToList());
         }
@@ -653,7 +642,7 @@ public class Command : ITokenParser
         return 0;
     }
 
-    private static void ShowTable(IReadOnlyList<(string Name, string[] Help)> items)
+    private static void ShowTable(IReadOnlyList<(string Name, string[] Help, string? Default)> items)
     {
         var maxLen = items.Select(x => x.Name.Length).Max();
 
@@ -674,6 +663,8 @@ public class Command : ITokenParser
                     sb.Append(' ', maxLen + 2);
                 }
                 sb.Append(item.Help.Last());
+                if (item.Default != null)
+                    sb.Append(' ').Append(item.Default);
             }
             Console.WriteLine(sb.ToString());
         }
