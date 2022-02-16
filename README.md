@@ -1,5 +1,5 @@
 # CommandLine
-![main workflow](https://github.com/sigurn/CommandLine/actions/workflows/dotnet.yml/badge.svg)
+![main workflow](https://github.com/sigurn/CommandLine/actions/workflows/build.yml/badge.svg)
 
 
 ## Why
