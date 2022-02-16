@@ -101,12 +101,12 @@ Usage:
   GetStarted [<name>] [options]
 
 Arguments:
-  <name> {world}  Name to be shown in the greeting
+  <name>  Name to be shown in the greeting {world}
 
 Options:
-  -s, --short [true|false] {false}  Flag defines if the short version of the greeting should be shown
-  --version                         Show version information
-  -?, -h, --help                    Show help and usage information
+  -s, --short [true|false]  Flag defines if the short version of the greeting should be shown {false}
+  --version                 Show version information
+  -?, -h, --help            Show help and usage information
 ```
 
 ## Advanced example
