@@ -16,7 +16,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/Sigurn.CommandLine.sln
     - name: Build
       run: dotnet build -c Release --no-restore src/Sigurn.CommandLine.sln
     - name: Test
