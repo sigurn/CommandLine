@@ -70,13 +70,13 @@ class Options<T> : IOptions where T : class, new()
         _arguments = arguments.OrderBy(x => x.Position).ToList();
         bool isRequired = false;
         bool isArray = false;
-        foreach(var arg in _arguments)
+        foreach(var arg in _arguments.Reverse())
         {
-            if (isArray)
+            if (isArray && arg.IsArray)
                 throw new CommandLineException("Only last argument may be an array.");
 
             if (isRequired && !arg.IsRequired)
-                throw new CommandLineException("If one argument is requied all the futher arguments must be required too.");
+                throw new CommandLineException("If one argument is requied all the previous arguments must be required too.");
 
             isRequired = arg.IsRequired ? true : isRequired;
             isArray = arg.IsArray ? true : isArray;
