@@ -56,6 +56,11 @@ public class Command : ITokenParser
 
         if (shortNames.Contains('?'))
             throw new ArgumentException($"The short option '?' is already defined");
+
+        var args = options.ArgumentsList;
+        for (int i = 0; i < args.Count - 1; i++)
+            if (args[i].Position == args[i + 1].Position)
+                throw new ArgumentException($"Two arguments '{args[i].Name}' and '{args[i+1].Name}' have the same position {args[i].Position}");
     }
 
     /// <summary>

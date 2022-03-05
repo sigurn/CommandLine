@@ -547,4 +547,56 @@ public class ParserTests
         Assert.Equal(15, argumentOptions.IntArgument);
         Assert.True(argumentOptions.TestFlag);
     }
+
+    class InvalidRequiredArguments
+    {
+        [Argument(0)]
+        public string? Arg1 { get; set; }
+
+        [Argument(1, IsRequired = true)]
+        public string? Arg2 { get; set; }
+
+        [Argument(2)]
+        public string? Arg3 { get; set; }
+    }
+
+    [Fact]
+    public void RequiredArguments()
+    {
+        var argumentOptions = new InvalidRequiredArguments();
+
+        var parser = Parser.New<InvalidRequiredArguments>((options) =>
+        {
+            argumentOptions = options;
+        });
+
+        parser.Run(new string[] { "arg1", "arg2", "arg3" });
+        Assert.Equal(-1, Environment.ExitCode);
+    }
+
+    class InvalidOrderArguments
+    {
+        [Argument(0)]
+        public string? Arg1 { get; set; }
+
+        [Argument(1)]
+        public string? Arg2 { get; set; }
+
+        [Argument(1)]
+        public string? Arg3 { get; set; }
+    }
+
+    [Fact]
+    public void ArgumentsOrder()
+    {
+        var argumentOptions = new InvalidOrderArguments();
+
+        var parser = Parser.New<InvalidOrderArguments>((options) =>
+        {
+            argumentOptions = options;
+        });
+
+        var ex = Assert.Throws<AggregateException>(() => parser.Run(new string[] { "arg1", "arg2", "arg3" }));
+        Assert.IsType<ArgumentException>(ex.InnerExceptions[0]);
+    }
 }
