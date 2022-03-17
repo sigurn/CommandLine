@@ -570,8 +570,8 @@ public class ParserTests
             argumentOptions = options;
         });
 
-        parser.Run(new string[] { "arg1", "arg2", "arg3" });
-        Assert.Equal(-1, Environment.ExitCode);
+        var ex = Assert.Throws<AggregateException>(() => parser.Run(new string[] { "arg1", "arg2", "arg3" }));
+        Assert.IsType<ArgumentException>(ex.InnerExceptions[0]);
     }
 
     class InvalidOrderArguments
