@@ -4,7 +4,7 @@
 
 ## Why
 
-I looked through through NuGet.org packages and haven't found decent command line parser.
+I looked through NuGet.org packages and haven't found decent command line parser.
 They are either not command oriented so doesn't support deep command nesting (which is what I need)
 or they are in integral part of other projects which next to impossible use separately.
 [System.CommandLine](https://github.com/dotnet/command-line-api) looks promisisng but it is in pre-release state for two years.
