@@ -108,8 +108,22 @@ namespace Sigurn.CommandLine
                 .ToLower();
         }
 
-        public static object ParseValue(string token, Type type)
+        public static IValueParser? GetCustomParser(PropertyInfo propInfo)
         {
+            if (propInfo == null)
+                return null;
+
+            var attrs = propInfo.GetCustomAttributes(typeof(ValueParserAttribute), true);
+            if (attrs == null || attrs.Length == 0)
+                return null;
+
+            return ((ValueParserAttribute)attrs[0]).GetParser() ?? null;
+        }
+
+        public static object ParseValue(string token, Type type, IValueParser? parser = null)
+        {
+            if (parser != null)
+                return parser.ParseValue(token, type);
             if (type == typeof(bool))
                 return bool.Parse(token);
             else if (type == typeof(sbyte))

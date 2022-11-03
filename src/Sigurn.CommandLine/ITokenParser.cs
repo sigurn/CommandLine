@@ -1,6 +1,6 @@
 ﻿namespace Sigurn.CommandLine;
 
-internal interface ITokenParser
+interface ITokenParser
 {
     ITokenParser ParseToken(string token);
 }

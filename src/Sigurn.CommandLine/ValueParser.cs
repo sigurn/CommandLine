@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Globalization;
 using System.Reflection;
 
 namespace Sigurn.CommandLine;
@@ -66,6 +65,7 @@ class ValueParser : ITokenParser
     protected virtual ITokenParser ParseTokenImp(string token)
     {
         var type = _propInfo.PropertyType;
+        var parser = Helpers.GetCustomParser(_propInfo);
 
         try
         {
@@ -78,7 +78,7 @@ class ValueParser : ITokenParser
                 if (type == typeof(string) && (token.StartsWith("--") || token.StartsWith("-")))
                     return _parent.ParseToken(token);
 
-                var value = Helpers.ParseValue(token, type);
+                var value = Helpers.ParseValue(token, type, parser);
 
                 Array? arr = _propInfo.GetValue(_instance) as Array;
                 if (arr == null)
@@ -111,7 +111,7 @@ class ValueParser : ITokenParser
                 if (itemType == typeof(string) && (token.StartsWith("--") || token.StartsWith("-")))
                     return _parent.ParseToken(token);
 
-                var value = Helpers.ParseValue(token, itemType);
+                var value = Helpers.ParseValue(token, itemType, parser);
 
                 var list = _propInfo.GetValue(_instance) as IList;
                 if (list == null || !IsSet)
@@ -136,7 +136,7 @@ class ValueParser : ITokenParser
                 var flags = token.Split('+');
                 foreach(var flag in flags)
                 {
-                    var propValue = Helpers.ParseValue(flag, type);
+                    var propValue = Helpers.ParseValue(flag, type, parser);
 
                     var obj = _propInfo.GetValue(_instance);
                     if (obj == null || !IsSet)
@@ -152,7 +152,7 @@ class ValueParser : ITokenParser
             }
             else
             {
-                var propValue = Helpers.ParseValue(token, type);
+                var propValue = Helpers.ParseValue(token, type, parser);
                 _propInfo.SetValue(_instance, propValue);
                 IsSet = true;
                 return _parent;

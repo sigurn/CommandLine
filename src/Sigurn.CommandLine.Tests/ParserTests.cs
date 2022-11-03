@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,31 @@ class CustomType
     {
         Value = value;
     }
+}
+
+class DateTimeParser : IValueParser
+{
+    public object ParseValue(string token, Type type)
+    {
+        if (type != typeof(DateTime))
+            throw new ArgumentException($"This parse method doesn't support parsing to {type}", nameof(type));
+
+        return new DateTime(long.Parse(token));
+    }
+}
+
+class InvalidParserOption
+{
+    [Option("value")]
+    [ValueParser(typeof(string))]
+    public string Value { get; set; }
+}
+
+class NullParserOption
+{
+    [Option("value")]
+    [ValueParser(null)]
+    public string Value { get; set; }
 }
 
 class ParseType
@@ -180,6 +206,10 @@ class TypedOptions
 
     [Option("enum-flags-option")]
     public TestFlags EnumFlagsOption { get; set; }
+
+    [Option("date-time-option")]
+    [ValueParser(typeof(DateTimeParser))]
+    public DateTime DateTimeOption { get; set; }
 }
 
 public class ParserTests
@@ -528,6 +558,10 @@ public class ParserTests
 
         parser.Run(new string[] { "--enum-flags-option=value2+value4" });
         Assert.Equal(TestFlags.Value2 | TestFlags.Value4, typedOptions.EnumFlagsOption);
+
+        var dt = DateTime.UtcNow;
+        parser.Run(new string[] { $"--date-time-option={dt.Ticks}" });
+        Assert.Equal(dt, typedOptions.DateTimeOption);
     }
 
     [Fact]
@@ -598,5 +632,33 @@ public class ParserTests
 
         var ex = Assert.Throws<AggregateException>(() => parser.Run(new string[] { "arg1", "arg2", "arg3" }));
         Assert.IsType<ArgumentException>(ex.InnerExceptions[0]);
+    }
+
+    [Fact]
+    public void InvalidParserOption()
+    {
+        var invalidOptions = new InvalidParserOption();
+
+        var parser = Parser.New<InvalidParserOption>((options) =>
+        {
+            invalidOptions = options;
+        });
+
+        var ex = Assert.Throws<AggregateException>(() => parser.Run(new string[] { "--value=123" }));
+        Assert.IsType<ArgumentException>(ex.InnerExceptions[0]);
+    }
+
+    [Fact]
+    public void NullParserOption()
+    {
+        var nullOptions = new NullParserOption();
+
+        var parser = Parser.New<NullParserOption>((options) =>
+        {
+            nullOptions = options;
+        });
+
+        var ex = Assert.Throws<AggregateException>(() => parser.Run(new string[] { "--value=123" }));
+        Assert.IsType<ArgumentNullException>(ex.InnerExceptions[0]);
     }
 }
