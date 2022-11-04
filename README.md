@@ -338,7 +338,7 @@ var parser = Parser.New()
 ```C#
 var parser = Parser.New()
   .WithCommand(new Command("hello", () => {Console.WriteLine("Hello, world!"), "Hello command help text")
-    .WitrhCommand("subcommand", () => Concole.WriteLine("subcommand")));
+    .WithCommand("subcommand", () => Concole.WriteLine("subcommand")));
 ```
 
 ### Use methods as commands
