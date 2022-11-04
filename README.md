@@ -364,7 +364,7 @@ class Program
   {
     var parser = Parser.New()
       .WithCommand(new Command(Commands.Hello)
-        .WitrhCommand(Commands.Subcommand));
+        .WithCommand(Commands.Subcommand));
   }
 }
 ```
