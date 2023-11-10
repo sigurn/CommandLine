@@ -571,8 +571,8 @@ public class Command : ITokenParser
             sb.Append(" <command>");
 
         foreach(var arg in Options.ArgumentsList)
-                sb.Append(arg.IsRequired ? (arg.IsArray ? $" <{arg.Name}...>" : $" <{arg.Name}>") : 
-                    (arg.IsArray ? $" [<{arg.Name}...>]" : $" [<{arg.Name}>]"));
+                sb.Append(arg.IsRequired ? (arg.IsArray || arg.IsEnumFlag ? $" <{arg.Name}...>" : $" <{arg.Name}>") : 
+                    (arg.IsArray || arg.IsEnumFlag ? $" [<{arg.Name}...>]" : $" [<{arg.Name}>]"));
 
         sb.Append(" [options]");
 
@@ -590,11 +590,15 @@ public class Command : ITokenParser
                     sb.Clear();
                     sb.Append("  <");
                     sb.Append(x.Name);
-                    if (x.IsArray)
+                    if (x.IsArray || x.IsEnumFlag)
                         sb.Append("...");
                     sb.Append('>');
 
-                    return (Name: sb.ToString(), Help: x.HelpText, Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
+                    IEnumerable<string> helpText = x.HelpText;
+                    if (!string.IsNullOrEmpty(x.HelpPossibleValues))
+                        helpText = helpText.Append($"Possible values: {x.HelpPossibleValues}");
+
+                    return (Name: sb.ToString(), Help: helpText.ToArray(), Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
                 });
 
             ShowTable(cmdList.ToList());
@@ -619,7 +623,11 @@ public class Command : ITokenParser
                 else
                     sb.Append($"<{x.HelpValue}>");
 
-                return (Name: sb.ToString(), Help: x.HelpText, Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
+                IEnumerable<string> helpText = x.HelpText;
+                if (!string.IsNullOrEmpty(x.HelpPossibleValues))
+                    helpText = helpText.Append($"Possible values: {x.HelpPossibleValues}");
+
+                return (Name: sb.ToString(), Help: helpText.ToArray(), Default: !x.IsRequired ? $"{{{x.Value}}}" : null);
             });
 
         if (IsRootCommand)

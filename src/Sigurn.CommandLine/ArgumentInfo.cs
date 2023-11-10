@@ -12,13 +12,17 @@ class ArgumentInfo : ValueParser
 
     public bool IsRequired { get; init; }
 
-    public string HelpValue
+    public string HelpPossibleValues
     {
         get
         {
-            if (Helpers.IsEnumProperty(PropInfo))
+            if (IsFlag)
+                return "true|false";
+
+           if (Helpers.IsEnumProperty(PropInfo) || Helpers.IsEnumFlagProperty(PropInfo))
                 return string.Join('|', Helpers.GetEnumValues(PropInfo));
-            return Name;
+
+            return string.Empty;            
         }
     }
 

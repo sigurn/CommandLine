@@ -22,29 +22,25 @@ class OptionInfo : ValueParser
 
             var sb = new StringBuilder();
 
-            if (IsArray)
+            if (IsArray || IsEnumFlag)
             {
                 sb.Append(Names[0]);
                 sb.Append("...");
                 return sb.ToString();
             }
 
-            if (Helpers.IsEnumFlagProperty(PropInfo))
-            {
-                sb.Append('(');
-                sb.AppendJoin('|', Helpers.GetEnumValues(PropInfo));
-                sb.Append(')');
-                sb.Append("...");
-                return sb.ToString();
-            }
-
-            if (Helpers.IsEnumProperty(PropInfo))
-            {
-                sb.AppendJoin('|', Helpers.GetEnumValues(PropInfo));
-                return sb.ToString();
-            }
-
             return Names[0];
+        }
+    }
+
+    public string HelpPossibleValues
+    {
+        get
+        {
+            if (Helpers.IsEnumFlagProperty(PropInfo) || Helpers.IsEnumProperty(PropInfo))
+                return string.Join('|', Helpers.GetEnumValues(PropInfo));
+
+            return string.Empty;
         }
     }
 
