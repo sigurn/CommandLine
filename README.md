@@ -12,7 +12,7 @@ So I decided to make a parser to cover my needs.
 
 ## Supported Frameworks
 
-Currently the project is built for .NET 6 only
+Currently the project is built for .NET 6 and .NET 8
 
 
 ## Features
