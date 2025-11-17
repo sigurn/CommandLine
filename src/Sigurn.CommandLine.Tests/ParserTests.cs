@@ -50,14 +50,14 @@ class InvalidParserOption
 {
     [Option("value")]
     [ValueParser(typeof(string))]
-    public string Value { get; set; }
+    public string Value { get; set; } = string.Empty;
 }
 
 class NullParserOption
 {
     [Option("value")]
-    [ValueParser(null)]
-    public string Value { get; set; }
+    [ValueParser(null!)]
+    public string Value { get; set; } = string.Empty;
 }
 
 class ParseType
